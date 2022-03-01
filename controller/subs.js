@@ -9,22 +9,53 @@ export const prices = async (req, res) => {
     res.json(prices.data.reverse())
 }
 
-export const createSubscription = async (req, res) => {
-    // console.log("req_data", JSON.stringify(req.body));    
-    try {
-      const subscription = await new Subscription({
-        data: JSON.stringify(req.body)
-      }).save();
-      console.log("success");
-      return res.json({
-        result: "success",
-      });
-    }
-    catch (error) {
-      console.log(error);
-    }
+// export const createSubscription = async (req, res) => {
+//     // console.log("req_data", JSON.stringify(req.body));    
+//     try {
+//       const subscription = await new Subscription({
+//         data: JSON.stringify(req.body.subscription),
+//         userID: req.userId
+//       }).save(object);
+//       console.log("success", subscription);
+//      res.json({
+//         result: "success",
+//       });
+//     }
+//     catch (error) {
+//       console.log(error);
+//     }
     
-}
+// }
+export const createSubscription = async (req, res) => {
+  // console.log("req_data", JSON.stringify(req.body));
+  try {
+    const data = JSON.stringify(req.body.subscription, null, 4);
+    console.log(data)
+    if (!req.body.subscription) {
+      return res
+      .status(400)
+          .send("no subscription")
+    } else {
+    const user = await User.findByIdAndUpdate(req.user._id, {
+      subscriptions: data,
+    });
+  
+    if (!user)
+      return res
+        .status(400)
+        .send("User not found")
+
+        .save();
+    console.log("success");
+    return res.json({
+      result: "success",
+    })};
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
 
 export const subscriptionStatus = async (req, res) => {
@@ -79,3 +110,5 @@ export const subscriptionStatus = async (req, res) => {
       console.log(err);
     }
   };
+
+
