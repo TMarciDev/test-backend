@@ -2,6 +2,8 @@ import express from "express";
 
 const router = express.Router();
 
+const bodyParser = require("body-parser");
+
 import {
   prices,
   createSubscription,
@@ -13,7 +15,8 @@ import {
 import { requireSignIn } from "../middlewares";
 
 router.get("/prices", prices);
-router.post("/webhook", webhook);
+router.post("/webhook", bodyParser.raw({ type: "application/json" }), webhook);
+//or express.raw({ type: "application/json" })
 router.post("/create-subscription", requireSignIn, createSubscription);
 router.get("/subscription-status", requireSignIn, subscriptionStatus);
 router.get(
