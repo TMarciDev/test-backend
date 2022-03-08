@@ -15,8 +15,8 @@ import {
 import { requireSignIn } from "../middlewares";
 
 router.get("/prices", prices);
-router.post("/webhook", bodyParser.raw({ type: "application/json" }), webhook);
-//or express.raw({ type: "application/json" })
+router.post("/webhook", express.raw({ type: "application/json" }), webhook);
+//or  bodyParser.raw({ type: "application/json" })
 router.post("/create-subscription", requireSignIn, createSubscription);
 router.get("/subscription-status", requireSignIn, subscriptionStatus);
 router.get(

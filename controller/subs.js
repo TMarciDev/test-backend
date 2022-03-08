@@ -2,6 +2,7 @@ import Subscription from "../models/subscription";
 import User from "../models/user";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripeRaw = require("stripe");
 
 export const prices = async (req, res) => {
   const prices = await stripe.prices.list();
@@ -10,7 +11,8 @@ export const prices = async (req, res) => {
 };
 
 export const webhook = async (req, res) => {
-  stripe = stripe(process.env.STRIPE_KEY);
+  console.log("webhook started");
+  stripe = stripeRaw;
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const sig = req.headers["stripe-signature"];
 
@@ -26,10 +28,12 @@ export const webhook = async (req, res) => {
   // Handle the event
   switch (event.type) {
     case "invoice.payment_succeeded":
+      console.log("put");
+
       const invoice = event.data.object;
       // Then define and call a function to handle the event invoice.payment_succeeded
       const newSub = new Subscription({
-        data: [JSON.stringify(req.body)],
+        data: [JSON.stringify(invoice)],
       });
       try {
         const savedSub = await newSub.save();
