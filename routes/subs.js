@@ -13,7 +13,7 @@ import {
 import { requireSignIn } from "../middlewares";
 
 router.get("/prices", prices);
-router.get("/webhook", webhook);
+router.post("/webhook", webhook);
 router.post("/create-subscription", requireSignIn, createSubscription);
 router.get("/subscription-status", requireSignIn, subscriptionStatus);
 router.get(

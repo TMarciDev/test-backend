@@ -29,7 +29,7 @@ export const webhook = async (req, res) => {
       const invoice = event.data.object;
       // Then define and call a function to handle the event invoice.payment_succeeded
       const newSub = new Subscription({
-        data: [req.body],
+        data: [JSON.stringify(req.body)],
       });
       try {
         const savedSub = await newSub.save();
